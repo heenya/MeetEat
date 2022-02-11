@@ -1,10 +1,7 @@
+<%@ include file="../Main/top.jsp" %>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src= "./JQuery/jquery-3.6.0.slim.js"></script>
 <script type="text/javascript">
@@ -131,50 +128,60 @@
     }
 
 </script>
-</head>
-<body>
-   <h1>./Member/updateForm.jsp</h1>
-   
+
    <%
      // 세션값 제어
-     String id = (String)session.getAttribute("id");
-   
      if(id == null){
     	 response.sendRedirect("./MemberLogin.me");
      }   
-   
-   %>
-   
-   <fieldset>
-   		<div>회원정보 수정</div>
-      	<form action="./MemberUpdateProAction.me" method="post" name="update" enctype="multipart/form-data" onsubmit="return checkValue();"> 
-      		<div>
-      			<label>프로필 사진</label>
-				<input type="text" disabled placeholder="프로필을 업로드하세요">
-	      		<input type="file" name="profile_image">
-		    </div>
-		    <div>
-		      	<label>아이디</label>	
-		        <input type="text" name="id" value="${ mdto.id }" readonly="readonly">
-		    </div>
-		    <div>
-		        <label>비밀번호</label>
-		        <input type="password" name="pw" placeholder="비밀번호를 입력하세요.">
-		    </div>
-		    <div>
-		        <label>닉네임</label>
-	        	<input type="text" name="nickname" id="nickname">
-	        	<input type="button" value="중복체크" onclick="nicknameCheck(this.form.nickname.value)">		        
-		    </div>
-		    <div>
-		        <label>휴대폰 번호(-없이 번호만 입력해주세요)</label>
-	        	<input type="text" name="phone" id="phone" maxlength="11" placeholder="ex)01012345678">
-	        </div>
-		    <div>
-		    	<label>이메일</label>
-	         	<input type="text" name="email1" id="email1" value="이메일" maxlength="50" onfocus="this.value='';"> @ 
-				<input type="text" name="email2" value="" disabled>
-				<select name="email" id="email" onchange="email_change()">
+  %>
+
+<form action="./MemberUpdateProAction.me" method="post" name="update" enctype="multipart/form-data" onsubmit="return checkValue();" class="container"> 
+	<div class="row justify-content-center">
+	<fieldset class="card bg-light mb-6 col-lg-6">
+    <legend class="card-header">내정보 수정하기</legend>
+   	<div class="p-sm-5">
+		<!-- id -->
+		<div class="form-group">
+ 			<label class="form-label mt-4">ID</label>
+	     	<input type="text" class="form-control" name="id" id="id" readonly="readonly" value="${ mdto.id }">
+		</div>
+    
+	    <!-- pw -->
+	    <div class="form-group">
+	      <label class="form-label mt-4">Password</label>
+	      <input type="password" class="form-control col-sm-8" name="pw" id="pw" placeholder="비밀번호를 입력하세요" onkeyup="pwCheckFunction();">
+	    </div>
+    
+	    <div class="form-group">
+	      <label class="form-label mt-4">Password</label>
+	      <input type="password" class="form-control col-sm-8" name="checkPw" placeholder="비밀번호를 확인하세요" onkeyup="pwCheckFunction();">
+	    </div>
+	    
+	    <!-- 닉네임 -->
+		<div class="form-group row">
+ 			<label class="form-label mt-4">Nickname</label>
+			<div class="input-group">
+	     		<input type="text" class="form-control" name="nickname" id="nickname" value="${ mdto.nickname }">
+	    		<button class="btn btn-warning" type="button" onclick="nicknameCheck(this.form.nickname.value)">중복확인</button>
+			</div>
+		</div>
+		
+		<!-- 연락처 -->
+		<div class="form-group">
+	      <label class="form-label mt-4">Phone</label>
+	      <input type="text" class="form-control col-sm-8" name="phone" id="phone"  value="${ mdto.phone }" maxlength="11">
+	    </div>
+	    
+	   	<!-- 이메일 -->
+	   	
+		<div class="form-group">
+	      <label class="form-label mt-4 col-sm-2">Email</label>
+	      <div class=" d-flex">
+	      <div class="col-sm-4"><input type="text" name="email1" id="email1" value="이메일" maxlength="50" onfocus="this.value='';" class="form-control d-inline"></div>
+	      <div class="fs-3">@ </div>
+		  <div class="col-sm-4"><input type="text" name="email2" value="" disabled  class="form-control d-inline"></div>
+		  <div class="col-sm"><select name="email" id="email" onchange="email_change()"  class="form-select d-inline">
 					<option value="0">선택하세요</option>
 				 	<option value="daum.net">daum.net</option>
 					<option value="gmail.com">gmail.com</option>
@@ -182,24 +189,35 @@
 				 	<option value="naver.com">naver.com</option>
 				 	<option value="hanmail.net">hanmail.net</option>
 				 	<option value="6">직접 입력</option>
-				</select>
-		    </div>
-		    <div>
-		    	<label>주소</label>
-		        <input type="text" name="postcode" id="postcode" placeholder="우편번호">
-				<input type="button" onclick="daumPostcode()" value="우편번호 찾기"> <br>
-				<input type="text" name="address" id="address" placeholder="주소"> <br>
-				<input type="text" name="detailAddress" id="detailAddress" placeholder="상세주소">
-				<input type="text" name="extraAddress" id="extraAddress" placeholder="참고항목">
-		    </div>
-       		<div>        
-        		<input type="submit" value="회원수정">
-         		<input type="reset" value="초기화">
-       	 	</div>
-      	</form>
-   </fieldset>
-   
-   
-   
+				</select></div></div>
+	    </div>
+	    
+	    <!-- 주소 -->
+	   	<div class="form-group">
+	      <label class="form-label mt-4 col-sm-2">Address</label>
+	      <div class="form-floating">
+		      <div class="form-group d-flex mb-2">
+		      	<div class="col-sm-2 me-2"><input type="text" class="form-control col-sm-2 d-inline"  name="postcode" id="postcode" placeholder="우편번호" ></div>
+		      	<input type="button" onclick="daumPostcode()" value="우편번호 찾기" class="btn btn-warning my-sm-0">
+		      	</div>
+		      <div class="form-group d-flex pe-2">
+		      	<div class="col-sm-8"><input type="text" class="form-control d-inline me-2" name="address" id="address" placeholder="도로명주소" size=30></div>
+		      	<input type="hidden" name="extraAddress" id="extraAddress" placeholder="참고항목">
+		      	<div class="col-sm"><input type="text" class="form-control d-inline" name="detailAddress" id="detailAddress" placeholder="상세주소"></div>
+		      </div>
+	      </div>  
+	    </div>
+	    
+	    <!-- 수정하기, 초기화 -->
+	    <div class="my-4 d-flex justify-content-end">
+			    <input type="submit" value="수정하기" class="btn btn-lg btn-success px-6">
+			    <input type="reset" value="초기화" class="btn btn-lg disable btn-secondary">
+		</div>	    
+  	</div>  <!-- <div class="p-5"> -->
+	</fieldset>
+	</div>
+</form>    
+<div class="offcanvas-header"></div>
+<div class="offcanvas-header"></div>
 </body>
 </html>
