@@ -2,8 +2,12 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src= "./JQuery/jquery-3.6.0.slim.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style type="text/css">
+img {width:60px; height: 60px;}</style>
 <script type="text/javascript">
 
    function checkValue(){
@@ -33,7 +37,10 @@
 			document.update.phone.focus();
 			return false;			
 		}
-		if (document.update.address.value == "") {
+		if (document.update.address.value == "" && document.update.addr.value !="" ) {
+			document.update.address.value=document.update.addr.value;
+		}
+		if (document.update.address.value == "" && document.update.addr.value =="" ) {
 			alert("주소를 입력하세요");
 			document.update.address.focus();
 			return false;
@@ -126,6 +133,13 @@
             }
         }).open();
     }
+	
+	$(document).ready(function(){
+		var add="<c:out value='${mdto.email}'/>";
+		var dvAdd=add.split("@");
+		$("#email1").attr('value',dvAdd[0]);
+		$("#email2").attr('value',dvAdd[1]);
+	});
 
 </script>
 
@@ -140,22 +154,24 @@
 	<div class="row justify-content-center">
 	<fieldset class="card bg-light mb-6 col-lg-6">
     <legend class="card-header">내정보 수정하기</legend>
-   	<div class="p-sm-5">
+   	<div class="p-sm-5 text-nowrap">
+	  
 		<!-- id -->
-		<div class="form-group">
+		<div class="form-group ">
  			<label class="form-label mt-4">ID</label>
 	     	<input type="text" class="form-control" name="id" id="id" readonly="readonly" value="${ mdto.id }">
 		</div>
-    
+    	<div class="offcanvas-header"></div>
+		<!-- profile -->
+		<div class="form-group">
+		     <label for="formFile" class="form-label">Profile image</label>
+		     <input class="form-control" type="file" id="formFile">
+   		</div>
+
 	    <!-- pw -->
 	    <div class="form-group">
 	      <label class="form-label mt-4">Password</label>
 	      <input type="password" class="form-control col-sm-8" name="pw" id="pw" placeholder="비밀번호를 입력하세요" onkeyup="pwCheckFunction();">
-	    </div>
-    
-	    <div class="form-group">
-	      <label class="form-label mt-4">Password</label>
-	      <input type="password" class="form-control col-sm-8" name="checkPw" placeholder="비밀번호를 확인하세요" onkeyup="pwCheckFunction();">
 	    </div>
 	    
 	    <!-- 닉네임 -->
@@ -173,14 +189,13 @@
 	      <input type="text" class="form-control col-sm-8" name="phone" id="phone"  value="${ mdto.phone }" maxlength="11">
 	    </div>
 	    
-	   	<!-- 이메일 -->
-	   	
+	   	<!-- 이메일 -->	   	
 		<div class="form-group">
 	      <label class="form-label mt-4 col-sm-2">Email</label>
 	      <div class=" d-flex">
-	      <div class="col-sm-4"><input type="text" name="email1" id="email1" value="이메일" maxlength="50" onfocus="this.value='';" class="form-control d-inline"></div>
+	      <div class="col-sm-4"><input type="text" name="email1" id="email1" value="" maxlength="50" onfocus="this.value='';" class="form-control d-inline"></div>
 	      <div class="fs-3">@ </div>
-		  <div class="col-sm-4"><input type="text" name="email2" value="" disabled  class="form-control d-inline"></div>
+		  <div class="col-sm-4"><input type="text" name="email2" id="email2" value="" disabled class="form-control d-inline"></div>
 		  <div class="col-sm"><select name="email" id="email" onchange="email_change()"  class="form-select d-inline">
 					<option value="0">선택하세요</option>
 				 	<option value="daum.net">daum.net</option>
@@ -195,7 +210,11 @@
 	    <!-- 주소 -->
 	   	<div class="form-group">
 	      <label class="form-label mt-4 col-sm-2">Address</label>
-	      <div class="form-floating">
+	      <input type="text" class="form-control col-sm-8  mb-2" name="addr" id="addr" value="${ mdto.address }"  >
+	      <span class="navbar-toggler collapesd text-info fs-6" data-bs-toggle="collapse" data-bs-target="#new_add" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+      		 >> 주소 변경하기</span>
+	   	  <div class="navbar-collapse collapse mt-2" id="new_add" style="">
+	      <div class="form-floating navbar-collapse show" id="new_addr">
 		      <div class="form-group d-flex mb-2">
 		      	<div class="col-sm-2 me-2"><input type="text" class="form-control col-sm-2 d-inline"  name="postcode" id="postcode" placeholder="우편번호" ></div>
 		      	<input type="button" onclick="daumPostcode()" value="우편번호 찾기" class="btn btn-warning my-sm-0">
@@ -207,7 +226,7 @@
 		      </div>
 	      </div>  
 	    </div>
-	    
+
 	    <!-- 수정하기, 초기화 -->
 	    <div class="my-4 d-flex justify-content-end">
 			    <input type="submit" value="수정하기" class="btn btn-lg btn-success px-6">
@@ -217,6 +236,78 @@
 	</fieldset>
 	</div>
 </form>    
+
+<!-- 프로필사진 css, action -->
+<script type="text/javascript">
+$(document).ready(function() {
+
+    
+    var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.profile-pic').attr('src', e.target.result);
+            }
+    
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+
+    $(".file-upload").on('change', function(){
+        readURL(this);
+    });
+    
+    $(".upload-button").on('click', function() {
+       $(".file-upload").click();
+    });
+});
+</script>
+ <style>
+	 .profile-pic {
+	    width: 200px;
+	    max-height: 200px;
+	    display: inline-block;
+	}
+	
+	.file-upload {
+	    display: none !important; 
+	}
+	.circle {
+	    border-radius: 100% !important;
+	    overflow: hidden;
+	    width: 128px;
+	    height: 128px;
+	    border: 2px solid rgba(255, 255, 255, 0.2);
+	    position: absolute;
+	}
+	.circle>img {
+	    max-width: 100%;
+	    height: auto;
+	    display: block;
+	}
+	.p-image {
+	  position: absolute;
+	  top: 167px;
+	  right: 30px;
+	  color: #666666;
+	  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+	}
+	.p-image:hover {
+	  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+	}
+	.upload-button {
+	  font-size: 1.2em;
+	}
+	
+	.upload-button:hover {
+	  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+	  color: #999;
+	}
+ </style>
+
+
 <div class="offcanvas-header"></div>
 <div class="offcanvas-header"></div>
 </body>

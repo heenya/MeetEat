@@ -4,7 +4,7 @@
 <%@ page import="com.me.member.db.MemberDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
- 
+
   <%
 
     if(id == null){
@@ -22,16 +22,21 @@
 
 <form method="post" name="info" class="container">
 	<div class="row justify-content-center ">
-		<fieldset class="card bg-light mb-6 col-lg-6">
+		<fieldset class="card bg-light mb-6 col-lg-6 text-nowrap">
 		<legend class="card-header ps-5">내정보</legend>
 	    	<div class="p-sm-5 fs-5">
+	 		  <div class="d-flex">
 				<!-- id -->
-				<div class="form-group">
+				<div class="form-group col-sm-8 pt-3">
 		 			<label class="form-label mt-4">아이디</label>
-			     	<input type="text" class="form-control col-sm-8" name="id" readonly="readonly" value="${ mdto.id }">
-			   </div>
-		
-				
+			     	<input type="text" class="form-control" name="id" readonly="readonly" value="${ mdto.id }">
+			    </div>
+			    <div class="offcanvas-header"></div>
+				<!-- profile -->
+				<div class="form-group col-sm-4">
+					<div class="circle"><img class="profile-pic" src=<%=profile %>></div>
+			    </div>
+			  </div>
 				<!-- pw -->
 				<div class="form-group">
 		 			<label class="form-label mt-4">비밀번호</label>
@@ -90,8 +95,49 @@
 </form>    
 
 
- <%--  	프로필 사진 : <img alt="<%=profile %>" src="<%=profile %>" style="width: 100px; height: 100px;"> <br> --%>
-
+<!-- 프로필사진 css -->
+ <style>
+	 .profile-pic {
+	    width: 200px;
+	    max-height: 200px;
+	    display: inline-block;
+	}
+	
+	.file-upload {
+	    display: none !important; 
+	}
+	.circle {
+	    border-radius: 100% !important;
+	    overflow: hidden;
+	    width: 128px;
+	    height: 128px;
+	    border: 2px solid rgba(255, 255, 255, 0.2);
+	    position: absolute;
+	}
+	.circle>img {
+	    max-width: 100%;
+	    height: auto;
+	    display: block;
+	}
+	.p-image {
+	  position: absolute;
+	  top: 167px;
+	  right: 30px;
+	  color: #666666;
+	  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+	}
+	.p-image:hover {
+	  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+	}
+	.upload-button {
+	  font-size: 1.2em;
+	}
+	
+	.upload-button:hover {
+	  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+	  color: #999;
+	}
+ </style>
  <div class="offcanvas-header"></div>
  <div class="offcanvas-header"></div>
   

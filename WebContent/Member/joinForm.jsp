@@ -178,13 +178,15 @@
 	    </div>
     
 	    <div class="form-group">
-	      <label class="form-label mt-4 col-sm-2">비밀번호 확인</label>
+	      <label class="form-label mt-4 col-sm-2 text-nowrap">비밀번호 확인</label>
 	      <input type="password" class="form-control col-sm-8" name="checkPw" placeholder="비밀번호를 확인하세요" onkeyup="pwCheckFunction();">
 	      <h5 id="pwCheckMessage"></h5>
 	    </div>
 	    
+<!-- 	    프로필
+	    <input type="hidden" name="profile_image" value="pic0.png"> -->
 	    <!-- 닉네임 -->
-		<div class="form-group row">
+		<div class="form-group row text-nowrap">
  			<label class="form-label mt-4 col-sm-2">Nickname</label>
 			<div class="input-group">
 	     		<input type="text" class="form-control" name="nickname" id="nickname" placeholder="닉네임을 입력하세요">
@@ -218,7 +220,7 @@
 	    
 	    <!-- 주소 -->
 	   	<div class="form-group">
-	      <label class="form-label mt-4 col-sm-2">Address</label>
+	      <label class="form-label mt-4 col-sm-2 text-nowrap">Address</label>
 	      <div class="form-floating">
 		      <div class="form-group d-flex mb-2">
 		      	<div class="col-sm-2 me-2"><input type="text" class="form-control col-sm-2 d-inline"  name="postcode" id="postcode" placeholder="우편번호" ></div>
