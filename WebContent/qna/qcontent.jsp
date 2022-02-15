@@ -32,13 +32,15 @@
 
  	<div  class="py-sm-2 float-sm-end">
 
-	<%if(id!=null && id.equals(qdto.getId())||id.equals("admin")){ %>
+	<%if(id!=null){ %>
+	<%if(id.equals(qdto.getId())||id.equals("admin")){ %>
 		<input type="button" value="수정" onclick="location.href='./QnaUpdate.bo?qno=<%=qdto.getQno()%>'" class="btn btn-warning">
 		<input type="button" value="삭제" onclick="location.href='./QnaDelete.bo?qno=<%=qdto.getQno()%>'" class="btn btn-danger">	
 	<%} %>	
-	<%if(id!=null && id.equals("admin")){ %>	
+	<%if(id.equals("admin")){ %>	
 		<input type="button" value="답글" onclick="location.href='QnaReply.bo?qno=<%=qdto.getQno()%>&re_ref=<%=qdto.getRe_ref()%>&re_lev=<%=qdto.getRe_lev()%>&re_seq=<%=qdto.getRe_seq()%>';" class="btn btn-info">
 	<%} %>
+ 	<%} %>
 		<input type="button" value="목록" onclick=" location.href='./QnaList.bo'" class="btn btn-secondary">
 		
 	</div>
